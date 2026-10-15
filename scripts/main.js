@@ -153,7 +153,11 @@ async function commitAfterRoll(subject) {
   bulk.activity = {};
 
   try {
-    await actor.performBulkUpdate(bulk);
+    // Tell the audit module that items destroyed by confirmed consumption
+    // are used up, not manually removed. Other bulk operations are unchanged.
+    await actor.performBulkUpdate(bulk, {
+      deleteOptions: { lipatosItemConsumed: true, itemMoveStackUse: true }
+    });
   } catch (err) {
     console.error(`${MODULE_ID} | Failed to apply deferred item consumption`, err);
     ui.notifications?.error("Не удалось списать использование предмета после броска. Сообщите ГМу.");
