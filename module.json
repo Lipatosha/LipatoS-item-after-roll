@@ -2,7 +2,7 @@
   "id": "lipatos-item-after-roll",
   "title": "LipatoS - Расход предметов после броска",
   "description": "Для обычных игроков откладывает расход зарядов и количества предмета до фактического броска кубика. Если бросок отменён, ресурс предмета не расходуется. Также переводит Drink как «Выпить» и заменяет кнопку «Использовать характеристику» на «Использовать» без иконки.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "authors": [
     {
       "name": "LipatoS"
@@ -28,5 +28,5 @@
     "scripts/main.js"
   ],
   "manifest": "https://raw.githubusercontent.com/Lipatosha/LipatoS-item-after-roll/main/module.json",
-  "download": "https://raw.githubusercontent.com/Lipatosha/LipatoS-item-after-roll/main/lipatos-item-after-roll-v1.0.2.zip"
+  "download": "https://github.com/Lipatosha/LipatoS-item-after-roll/releases/latest/download/lipatos-item-after-roll.zip"
 }
