@@ -1,0 +1,40 @@
+name: Release LipatoS Item After Roll v1.0.3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/release-v1.0.3.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check code and consumption regression tests
+        run: |
+          node --check scripts/main.js
+          node tests/consumption-tag.cjs
+          node -e 'const m=require("./module.json");if(m.version!=="1.0.3")process.exit(1);'
+      - name: Build installable ZIP
+        run: |
+          zip -q lipatos-item-after-roll.zip module.json scripts/main.js README.md CHANGELOG.md
+          unzip -t lipatos-item-after-roll.zip
+      - name: Publish version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v1.0.3"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" lipatos-item-after-roll.zip module.json --clobber
+          else
+            gh release create "$TAG" lipatos-item-after-roll.zip module.json \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "LipatoS — Расход предметов после броска $TAG" \
+              --notes "Расход до последнего предмета не регистрируется как ручное удаление в журнале аудита."
+          fi
